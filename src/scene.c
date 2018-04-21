@@ -9,7 +9,7 @@ void init_lighting()
 {
   float ambient_light[] = { 0.0f, 0.0f, 0.0f, 0.0f };
   float diffuse_light[] = { 0.0f, 0.0f, 0.0, 0.0f };
-  float specular_light[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+  float specular_light[] = { 0.0f, 0.0f, 0.0f, 0.0f };
   float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
 
   glLightfv( GL_LIGHT0, GL_AMBIENT, ambient_light );
@@ -38,8 +38,8 @@ void init_scene( Scene* scene )
   scene->material.specular.green = 0.296648;
   scene->material.specular.blue = 0.296648;
 
-  scene->material.emission.red = 1.0f;
-  scene->material.emission.green = 0.55859375f;
+  scene->material.emission.red = 0.0f;
+  scene->material.emission.green = 0.0f;
   scene->material.emission.blue = 0.0f;
 
   scene->material.shininess = 0.088 * 128;
@@ -72,7 +72,7 @@ void set_material( const Material* material )
   material->emission.red,
   material->emission.green,
   material->emission.blue
-  };
+};
 
   glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, ambient_material_color );
   glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse_material_color );
@@ -83,13 +83,13 @@ void set_material( const Material* material )
 
 void set_fog()
 {
-  GLfloat fogDensity = 0.25;
-  GLfloat fogColor[4] = { 0.71484375, 0.109375, 0.109375, 1.0 };
-  glFogi( GL_FOG_MODE, GL_LINEAR );
+  GLfloat fogDensity = 0.20;
+  GLfloat fogColor[4] = { 0.28125, 0.625,  0.75390625, 1.0 };
+  glFogi( GL_FOG_MODE, GL_EXP2 );
   glFogfv( GL_FOG_COLOR, fogColor );
   glFogf( GL_FOG_DENSITY, fogDensity );
   glHint( GL_FOG_HINT, GL_NICEST );
-  glFogf( GL_FOG_START, 1.0 );
+  glFogf( GL_FOG_START, 1.25 );
   glFogf( GL_FOG_END, 5.0 );
 }
 

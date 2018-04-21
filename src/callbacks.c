@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <obj/draw.h>
+#include <GL/glut.h>
 
 #define VIEWPORT_RATIO ( 4.0 / 3.0 )
 #define VIEWPORT_ASPECT 45.0
@@ -21,7 +22,7 @@ void display()
 
   set_view( &camera );
   draw_scene( &scene );
-  
+
   glPopMatrix();
 
   glutSwapBuffers();
@@ -59,10 +60,6 @@ void mouse( int button, int state, int x, int y )
 {
     mouse_position.x = x;
     mouse_position.y = y;
-
-    /*if ( button == GLUT_MOUSE_DOWN ) {
-
-    }*/
 }
 
 void motion( int x, int y )
@@ -90,21 +87,23 @@ void keyboard( unsigned char key, int x, int y )
       break;
   case '+':
       ;
-      GLfloat current_ambient[4], current_diffuse[4];
+      GLfloat current_ambient[4], current_diffuse[4], current_specular[4];
       glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
       glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+      glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
 
       if ( current_ambient[3] < 1.0 ) {
-        current_ambient[0] += 0.1;
-        current_ambient[1] += 0.1;
-        current_ambient[2] += 0.1;
-        current_ambient[3] += 0.1;
-        current_diffuse[0] += 0.1;
-        current_diffuse[1] += 0.1;
-        current_diffuse[2] += 0.1;
-        current_diffuse[3] += 0.1;
+
+        int i = 0;
+        for ( i = 0; i < 4; ++i) {
+          current_ambient[i] += 0.1;
+          current_diffuse[i] += 0.1;
+          current_specular[i] += 0.1f;
+        }
+
         glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
         glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+        glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
       }
       break;
 
@@ -112,18 +111,20 @@ void keyboard( unsigned char key, int x, int y )
       ;
       glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
       glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+      glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
 
       if ( current_ambient[3] > 0.1) {
-        current_ambient[0] -= 0.1;
-        current_ambient[1] -= 0.1;
-        current_ambient[2] -= 0.1;
-        current_ambient[3] -= 0.1;
-        current_diffuse[0] -= 0.1;
-        current_diffuse[1] -= 0.1;
-        current_diffuse[2] -= 0.1;
-        current_diffuse[3] -= 0.1;
+
+        int i = 0;
+        for ( i = 0; i < 4; ++i ) {
+          current_ambient[i] -= 0.1;
+          current_diffuse[i] -= 0.1;
+          current_specular[i] -= 0.1f;
+        }
+
         glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
         glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+        glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
       }
       break;
 
@@ -163,17 +164,17 @@ void keyboard( unsigned char key, int x, int y )
       }
       break;
 
-  case 't': case 'T':
-    if ( scene.selected_cube < MAX_CUBE_NUMBER - 1 ) {
-      scene.selected_cube++;
-    }
-    break;
+    case 't': case 'T':
+      if ( scene.selected_cube < MAX_CUBE_NUMBER - 1 ) {
+        scene.selected_cube++;
+      }
+      break;
 
-  case 'g': case 'G':
-    if ( scene.selected_cube > 0 ) {
-      scene.selected_cube--;
-    }
-    break;
+    case 'g': case 'G':
+      if ( scene.selected_cube > 0 ) {
+        scene.selected_cube--;
+      }
+      break;
 
   }
 
@@ -186,6 +187,7 @@ void keyboard_up( unsigned char key, int x, int y )
   case 'w': case 'W':
   case 's': case 'S':
       set_camera_speed( &camera, 0.0 );
+      glutPostRedisplay();
       break;
 
   case 'a': case 'A':
