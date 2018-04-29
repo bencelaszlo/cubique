@@ -2,6 +2,12 @@
 #define UTILS_H
 
 /**
+  * Define pseudo-boolean type.
+  */
+#define FALSE 0
+#define TRUE 1
+
+/**
  * GLSL-like three dimensional vector
  */
 typedef struct vec3

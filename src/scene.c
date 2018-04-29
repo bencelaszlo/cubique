@@ -7,9 +7,9 @@
 
 void init_lighting()
 {
-  float ambient_light[] = { 0.0f, 0.0f, 0.0f, 0.0f };
-  float diffuse_light[] = { 0.0f, 0.0f, 0.0, 0.0f };
-  float specular_light[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+  float ambient_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+  float diffuse_light[] = { 1.0f, 1.0f, 1.0, 1.0f };
+  float specular_light[] = { 1.0f, 1.0f, 1.0f, 1.0f };
   float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
 
   glLightfv( GL_LIGHT0, GL_AMBIENT, ambient_light );
@@ -20,11 +20,12 @@ void init_lighting()
 
 void init_scene( Scene* scene )
 {
+  //Load resources
   load_model( &( scene->cube ), "res/cube.obj");
-  scene->texture_id = load_texture( "res/crate_1.jpg" );
+  scene->texture_id = load_texture( "res/glass_cube.jpg" );
+  scene->help_menu_texture_id = load_texture( "res/help_menu.jpg" );
 
-  //Textúra kiválasztása, a második paraméter az azonosítója
-  glBindTexture( GL_TEXTURE_2D, scene->texture_id );
+  glBindTexture( GL_TEXTURE_2D, scene->texture_id ); //Select texture (its second parameter is the id of a loaded texture)
 
   scene->material.ambient.red = 0.25;
   scene->material.ambient.green = 0.20725;
@@ -44,8 +45,7 @@ void init_scene( Scene* scene )
 
   scene->material.shininess = 0.088 * 128;
 
-  //Fények beállítása
-  init_lighting( scene );
+  init_lighting( scene ); //Set lights
 }
 
 void set_material( const Material* material )
@@ -95,9 +95,7 @@ void set_fog()
 
 void draw_scene( const Scene* scene )
 {
-  //Anyagjellemzők beállítása
   set_material( &(scene->material) );
-  //Ködhatás jellemzőinek beállítása
   set_fog();
 
   glDisable( GL_CULL_FACE );
@@ -107,9 +105,7 @@ void draw_scene( const Scene* scene )
   int i;
   for ( i = 0; i < MAX_CUBE_NUMBER; ++i ) {
     glTranslatef( scene->cube_translate[i][0], scene->cube_translate[i][1], scene->cube_translate[i][2] );
-    //Modell kirajzolása
     draw_model( &(scene->cube) );
-    //Textúra kiválasztása, a második paraméter az azonosítója
     glBindTexture( GL_TEXTURE_2D, scene->texture_id );
   }
 }

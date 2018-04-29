@@ -14,9 +14,9 @@ typedef struct Scene
   Model cube;
   Material material;
   GLuint texture_id;
+  GLuint help_menu_texture_id;
   float cube_translate[MAX_CUBE_NUMBER][3];
   int selected_cube;
-  int draw_menu;
 } Scene;
 
 /**

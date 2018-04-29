@@ -1,6 +1,6 @@
 #include "texture.h"
 
-#include <SOIL.h>
+#include <SOIL/SOIL.h>
 
 GLuint load_texture( char* filename )
 {

@@ -11,7 +11,13 @@ typedef struct Camera
   vec3 position;
   vec3 rotation;
   vec3 speed;
+  float distance;
 } Camera;
+
+/**
+  * Is the help menu turned on?
+  */
+int is_help_menu_on;
 
 /**
  * Initialize the camera to the start position.
@@ -42,5 +48,10 @@ void set_camera_speed( Camera* camera, double speed );
  * Set the speed of left and right side steps.
  */
 void set_camera_side_speed( Camera* camera, double speed );
+
+/**
+  * Show help menu about the program.
+  */
+void help_menu();
 
 #endif /* CAMERA_H */
