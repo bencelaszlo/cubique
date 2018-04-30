@@ -1,10 +1,7 @@
 #ifndef CALLBACKS_H
 #define CALLBACKS_H
 
-#include "camera.h"
 #include "scene.h"
-
-#include <GL/glut.h>
 
 /**
  * Scene

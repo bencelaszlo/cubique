@@ -1,7 +1,5 @@
 #include "scene.h"
 
-#include <GL/glut.h>
-
 #include <obj/load.h>
 #include <obj/draw.h>
 
@@ -83,13 +81,13 @@ void set_material( const Material* material )
 
 void set_fog()
 {
-  GLfloat fogDensity = 0.20;
+  GLfloat fogDensity = 0.175;
   GLfloat fogColor[4] = { 0.28125, 0.625,  0.75390625, 1.0 };
   glFogi( GL_FOG_MODE, GL_EXP2 );
   glFogfv( GL_FOG_COLOR, fogColor );
   glFogf( GL_FOG_DENSITY, fogDensity );
   glHint( GL_FOG_HINT, GL_NICEST );
-  glFogf( GL_FOG_START, 1.25 );
+  glFogf( GL_FOG_START, 2.0 );
   glFogf( GL_FOG_END, 5.0 );
 }
 
@@ -104,86 +102,10 @@ void draw_scene( const Scene* scene )
 
   int i;
   for ( i = 0; i < MAX_CUBE_NUMBER; ++i ) {
-    glTranslatef( scene->cube_translate[i][0], scene->cube_translate[i][1], scene->cube_translate[i][2] );
+    glPushMatrix();
+    glTranslatef( scene->cube_translate[i].x, scene->cube_translate[i].y, scene->cube_translate[i].z );
     draw_model( &(scene->cube) );
     glBindTexture( GL_TEXTURE_2D, scene->texture_id );
+    glPopMatrix();
   }
-}
-
-int can_move( const Scene* scene, const char axis, const char direction )
-{
-  int move = 1;
-
-  int i = 0;
-  switch ( axis ) {
-    case 'x':
-      while ( move == 1 && i < MAX_CUBE_NUMBER ) {
-        if ( i != scene->selected_cube ) {
-          if ( ( scene->cube_translate[i][1] == scene->cube_translate[scene->selected_cube][1] ) && ( scene->cube_translate[i][2] == scene->cube_translate[scene->selected_cube][2] ) ) {
-            switch ( direction ) {
-               case '+':
-                if ( scene->cube_translate[scene->selected_cube][0] + 1.0 == scene->cube_translate[i][0] ) {
-                  move = 0;
-                }
-              break;
-
-              case '-':
-                if ( scene->cube_translate[i][0] == scene->cube_translate[scene->selected_cube][0] - 1.0 ) {
-                  move = 0;
-                }
-              break;
-             }
-          }
-        }
-        i++;
-      }
-      break;
-
-    case 'y':
-      while ( move == 1 && i < MAX_CUBE_NUMBER ) {
-        if ( i != scene->selected_cube ) {
-          if ( ( scene->cube_translate[i][0] == scene->cube_translate[scene->selected_cube][0] ) && ( scene->cube_translate[i][2] == scene->cube_translate[scene->selected_cube][2] ) ) {
-             switch ( direction ) {
-               case '+':
-                if ( scene->cube_translate[scene->selected_cube][1] + 1.0 == scene->cube_translate[i][1] ) {
-                  move = 0;
-                }
-              break;
-
-              case '-':
-                if ( scene->cube_translate[i][1] == scene->cube_translate[scene->selected_cube][1] - 1.0 ) {
-                  move = 0;
-                }
-              break;
-             }
-          }
-        }
-        i++;
-      }
-      break;
-
-    case 'z':
-      while ( move == 1 && i < MAX_CUBE_NUMBER ) {
-        if ( i != scene->selected_cube ) {
-          if ( ( scene->cube_translate[i][0] == scene->cube_translate[scene->selected_cube][0] ) && ( scene->cube_translate[i][1] == scene->cube_translate[scene->selected_cube][1] ) ) {
-             switch ( direction ) {
-               case '+':
-                if ( scene->cube_translate[scene->selected_cube][2] + 1.0 == scene->cube_translate[i][2] ) {
-                  move = 0;
-                }
-              break;
-
-              case '-':
-                if ( scene->cube_translate[i][2] == scene->cube_translate[scene->selected_cube][2] - 1.0 ) {
-                  move = 0;
-                }
-              break;
-             }
-          }
-        }
-        i++;
-      }
-      break;
-  }
-  return move;
 }

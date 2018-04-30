@@ -1,10 +1,5 @@
 #include "callbacks.h"
-#include "scene.h"
-
-#include <stdio.h>
-#include <obj/draw.h>
-#include <GL/glut.h>
-#include <math.h>
+#include "collision_detection.h"
 
 #define VIEWPORT_RATIO ( 4.0 / 3.0 )
 #define VIEWPORT_ASPECT 45.0
@@ -120,7 +115,7 @@ void keyboard( unsigned char key, int x, int y )
 
           if ( current_ambient[3] < 1.0 ) {
 
-            int i = 0;
+            int i;
             for ( i = 0; i < 4; ++i) {
               current_ambient[i] += 0.1;
               current_diffuse[i] += 0.1;
@@ -139,9 +134,9 @@ void keyboard( unsigned char key, int x, int y )
           glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
           glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
 
-          if ( current_ambient[3] > 0.1) {
+          if ( current_ambient[3] > 0.1f ) {
 
-            int i = 0;
+            int i;
             for ( i = 0; i < 4; ++i ) {
               current_ambient[i] -= 0.1;
               current_diffuse[i] -= 0.1;
@@ -155,50 +150,67 @@ void keyboard( unsigned char key, int x, int y )
           break;
 
         case 'z': case 'Z':
-          if ( can_move( &scene, 'y', '+') ) {
-            scene.cube_translate[scene.selected_cube][1] += 1.0f;
+          ;
+          vec3 new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.y += 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].y += 1.0f;
           }
           break;
 
         case 'h': case 'H':
-          if ( can_move( &scene, 'y', '-' ) ) {
-            scene.cube_translate[scene.selected_cube][1] -= 1.0f;
+          new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.y -= 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].y -= 1.0f;
           }
           break;
 
         case 'i': case 'I':
-          if ( can_move( &scene, 'z', '+' ) ) {
-            scene.cube_translate[scene.selected_cube][2] += 1.0f;
+          new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.z += 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].z += 1.0f;
           }
           break;
 
         case 'k': case 'K':
-          if ( can_move( &scene, 'z', '-' ) ) {
-            scene.cube_translate[scene.selected_cube][2] -= 1.0f;
+          new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.z -= 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].z -= 1.0f;
           }
           break;
 
         case 'j': case 'J':
-          if ( can_move( &scene, 'x', '+' ) == 1 ) {
-            scene.cube_translate[scene.selected_cube][0] += 1.0f;
+          new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.x += 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].x += 1.0f;
           }
           break;
 
         case 'l': case 'L':
-          if ( can_move( &scene, 'x', '-' ) == 1 ) {
-            scene.cube_translate[scene.selected_cube][0] -= 1.0f;
+          new_pos = scene.cube_translate[scene.selected_cube];
+          new_pos.x -= 1.0f;
+          if ( !check_collision_all( new_pos ) ) {
+            scene.cube_translate[scene.selected_cube].x -= 1.0f;
           }
           break;
 
         case 't': case 'T':
           if ( scene.selected_cube < MAX_CUBE_NUMBER - 1 ) {
             scene.selected_cube++;
+          } else {
+            scene.selected_cube = 0;
           }
           break;
 
         case 'g': case 'G':
           if ( scene.selected_cube > 0 ) {
             scene.selected_cube--;
+          } else {
+            scene.selected_cube = MAX_CUBE_NUMBER - 1;
           }
           break;
     }

@@ -1,4 +1,5 @@
 # cubique
+![Cubique logo](/media/cubique_logo_full.png)
 Számítógépi grafika féléves feladat.
 
 ## A feladat
@@ -19,5 +20,5 @@ Egy 3 dimenziós, számítógépes építőjáték, mozgatható kockákkal.
 
 ### További megvalósított lehetőségek:
 - [x] ködhatás
-- [ ] áttetsző kockák
-- [ ] ütközésvizsgálat a kockák között
+- [x] áttetsző kockák
+- [x] ütközésvizsgálat a kockák között

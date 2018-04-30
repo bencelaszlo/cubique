@@ -1,10 +1,6 @@
 #include "callbacks.h"
 #include "init.h"
 
-#include <GL/glut.h>
-
-#include <stdio.h>
-
 /**
  * Set the callbacks for GLUT.
  */

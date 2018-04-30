@@ -6,7 +6,7 @@
 
 #include <obj/model.h>
 
-#define MAX_CUBE_NUMBER 10
+#define MAX_CUBE_NUMBER 1000
 
 typedef struct Scene
 {
@@ -15,7 +15,7 @@ typedef struct Scene
   Material material;
   GLuint texture_id;
   GLuint help_menu_texture_id;
-  float cube_translate[MAX_CUBE_NUMBER][3];
+  vec3 cube_translate[MAX_CUBE_NUMBER];
   int selected_cube;
 } Scene;
 
