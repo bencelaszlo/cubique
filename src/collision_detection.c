@@ -23,7 +23,7 @@
    int is_colliding = FALSE;
 
    int i = 0;
-   while ( !is_colliding && i < MAX_CUBE_NUMBER ) {
+   while ( !is_colliding && i < scene.cube_number ) {
      if ( i != scene.selected_cube ) {
        is_colliding = check_collision( pos_new, scene.cube_translate[i], 1.0f, 0.0f );
     }

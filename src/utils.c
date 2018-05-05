@@ -4,5 +4,5 @@
 
 double degree_to_radian( double degree )
 {
-  return degree * M_PI / 180.0;
+  return degree * M_PI / 180.0f;
 }

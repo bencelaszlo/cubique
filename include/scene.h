@@ -6,7 +6,7 @@
 
 #include <obj/model.h>
 
-#define MAX_CUBE_NUMBER 1000
+#define DEFAULT_CUBE_NUMBER 2048
 
 typedef struct Scene
 {
@@ -15,8 +15,9 @@ typedef struct Scene
   Material material;
   GLuint texture_id;
   GLuint help_menu_texture_id;
-  vec3 cube_translate[MAX_CUBE_NUMBER];
   int selected_cube;
+  int cube_number;
+  vec3 cube_translate[DEFAULT_CUBE_NUMBER];
 } Scene;
 
 /**
@@ -25,14 +26,14 @@ typedef struct Scene
 void init_scene( Scene* scene );
 
 /**
- * Set the lighting of the scene.
+ * Initalize the lighting of the scene.
  */
-void set_lighting();
+void init_lighting();
 
 /**
- * Set the current material.
+ * Initalize the current material.
  */
-void set_material( const Material* material );
+void init_material( const Material* material );
 
 /**
  * Draw the scene objects.
@@ -40,8 +41,8 @@ void set_material( const Material* material );
 void draw_scene( const Scene* scene );
 
 /**
-  * Detects possible collisions between the selected and other objects.
+  * Reset the scene objects.
   */
-int can_move( const Scene* scene, const char axis, const char direction );
+  void reset_scene( Scene* scene );
 
 #endif /* SCENE_H */

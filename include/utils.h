@@ -35,7 +35,6 @@ typedef struct Material
   struct Color ambient;
   struct Color diffuse;
   struct Color specular;
-  struct Color emission;
   float shininess;
 } Material;
 

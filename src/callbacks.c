@@ -1,8 +1,9 @@
 #include "callbacks.h"
 #include "collision_detection.h"
+#include "io.h"
 
-#define VIEWPORT_RATIO ( 4.0 / 3.0 )
-#define VIEWPORT_ASPECT 45.0
+#define VIEWPORT_RATIO ( 16.0f / 9.0f )
+#define VIEWPORT_ASPECT 45.0f
 
 struct {
   int x;
@@ -22,8 +23,8 @@ void display()
   glPopMatrix();
 
   if ( is_help_menu_on ) {
-      glBindTexture( GL_TEXTURE_2D, scene.help_menu_texture_id );
-      help_menu();
+    glBindTexture( GL_TEXTURE_2D, scene.help_menu_texture_id );
+    help_menu();
   }
 
   glutSwapBuffers();
@@ -36,49 +37,49 @@ void reshape( GLsizei width, GLsizei height )
 
   ratio = (double)width / height;
   if ( ratio > VIEWPORT_RATIO ) {
-      w = (int)( (double)height * VIEWPORT_RATIO);
-      h = height;
-      x = ( width - w ) / 2;
-      y = 0;
+    w = (int)( (double)height * VIEWPORT_RATIO);
+    h = height;
+    x = ( width - w ) / 2;
+    y = 0;
   }
   else {
-      w = width;
-      h = (int)( (double)width / VIEWPORT_RATIO );
-      x = 0;
-      y = ( height - h ) / 2;
+    w = width;
+    h = (int)( (double)width / VIEWPORT_RATIO );
+    x = 0;
+    y = ( height - h ) / 2;
   }
 
   glViewport( x, y, w, h );
   glMatrixMode( GL_PROJECTION );
   glLoadIdentity();
-  gluPerspective( VIEWPORT_ASPECT, VIEWPORT_RATIO, 0.01, 5000.0 );
+  gluPerspective( VIEWPORT_ASPECT, VIEWPORT_RATIO, 0.01f, 15000.0f );
 }
 
 #define GLUT_MOUSE_WHEEL_UP 3
 #define GLUT_MOUSE_WHEEL_DOWN 4
 void mouse( int button, int state, int x, int y )
 {
-    if ( button == GLUT_MOUSE_WHEEL_DOWN ) {
-      if ( camera.distance <= 5.0f ) {
+  if ( button == GLUT_MOUSE_WHEEL_DOWN ) {
+    if ( camera.distance <= 50.0f ) {
         camera.distance += 0.5f;
-        glutPostRedisplay();
-      }
+      glutPostRedisplay();
     }
-    else if ( button == GLUT_MOUSE_WHEEL_UP ) {
-      if ( camera.distance >= 1.0f ) {
-        camera.distance -= 0.5f;
-        glutPostRedisplay();
-      }
+  }
+  else if ( button == GLUT_MOUSE_WHEEL_UP ) {
+    if ( camera.distance >= 1.0f ) {
+      camera.distance -= 0.5f;
+      glutPostRedisplay();
     }
-    else if ( ( button == GLUT_LEFT_BUTTON ) && (state == GLUT_DOWN ) ) {
-      mouse_device.is_down = TRUE;
-      mouse_device.x = x;
-      mouse_device.y = y;
-    }
+  }
+  else if ( ( button == GLUT_LEFT_BUTTON ) && (state == GLUT_DOWN ) ) {
+    mouse_device.is_down = TRUE;
+    mouse_device.x = x;
+    mouse_device.y = y;
+  }
 
-    if ( state == GLUT_UP ) {
-      mouse_device.is_down = FALSE;
-    }
+  if ( state == GLUT_UP ) {
+    mouse_device.is_down = FALSE;
+  }
 
 }
 
@@ -94,125 +95,133 @@ void motion( int x, int y )
 void keyboard( unsigned char key, int x, int y )
 {
   switch (key) {
-      case 'w': case 'W':
-            set_camera_speed( &camera, 1 );
-          break;
-      case 's': case 'S':
-          set_camera_speed( &camera, -1 );
-          break;
-      case 'a': case 'A':
-          set_camera_side_speed( &camera, 1 );
-          break;
-      case 'd': case 'D':;
-          set_camera_side_speed( &camera, -1 );
-          break;
-      case '+':
-          ;
-          GLfloat current_ambient[4], current_diffuse[4], current_specular[4];
-          glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
-          glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
-          glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
+    case 'w': case 'W':
+      set_camera_speed( &camera, 1 );
+      break;
+    case 's': case 'S':
+      set_camera_speed( &camera, -1 );
+      break;
+    case 'a': case 'A':
+      set_camera_side_speed( &camera, 1 );
+      break;
+    case 'd': case 'D':;
+      set_camera_side_speed( &camera, -1 );
+      break;
+    case '+':
+      ;
+      GLfloat current_ambient[4], current_diffuse[4], current_specular[4];
+      glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
+      glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+      glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
 
-          if ( current_ambient[3] < 1.0 ) {
+      if ( current_specular[3] < 1.0f ) {
 
-            int i;
-            for ( i = 0; i < 4; ++i) {
-              current_ambient[i] += 0.1;
-              current_diffuse[i] += 0.1;
-              current_specular[i] += 0.1f;
-            }
+        int i;
+        for ( i = 0; i < 4; ++i) {
+          current_ambient[i] += 0.1f;
+          current_diffuse[i] += 0.1f;
+          current_specular[i] += 0.1f;
+        }
 
-            glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
-            glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
-            glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
-          }
-          break;
+        glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
+        glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+        glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
+      }
+      if ( current_specular[3] > 0.1f ) {
+        glEnable( GL_FOG );
+        glClearColor( 0.28125f, 0.625f, 0.75390625f, 0.0f );
+      }
+      break;
 
-      case '-':
-          ;
-          glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
-          glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
-          glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
+    case '-':
+      ;
+      glGetLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
+      glGetLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+      glGetLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
 
-          if ( current_ambient[3] > 0.1f ) {
+      if ( current_specular[3] > 0.0f ) {
 
-            int i;
-            for ( i = 0; i < 4; ++i ) {
-              current_ambient[i] -= 0.1;
-              current_diffuse[i] -= 0.1;
-              current_specular[i] -= 0.1f;
-            }
+        int i;
+        for ( i = 0; i < 4; ++i ) {
+          current_ambient[i] -= 0.1f;
+          current_diffuse[i] -= 0.1f;
+          current_specular[i] -= 0.1f;
+        }
 
-            glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
-            glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
-            glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
-          }
-          break;
+        glLightfv( GL_LIGHT0, GL_AMBIENT, current_ambient );
+        glLightfv( GL_LIGHT0, GL_DIFFUSE, current_diffuse );
+        glLightfv( GL_LIGHT0, GL_SPECULAR, current_specular );
+      }
+      else if ( current_specular[3] < 0.1f ) {
+        glDisable( GL_FOG );
+        glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+      }
+      break;
 
-        case 'z': case 'Z':
-          ;
-          vec3 new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.y += 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].y += 1.0f;
-          }
-          break;
+    case 'z': case 'Z':
+      ;
+      vec3 new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.y += 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].y += 1.0f;
+      }
+      break;
 
-        case 'h': case 'H':
-          new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.y -= 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].y -= 1.0f;
-          }
-          break;
+    case 'h': case 'H':
+      new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.y -= 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].y -= 1.0f;
+      }
+      break;
 
-        case 'i': case 'I':
-          new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.z += 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].z += 1.0f;
-          }
-          break;
+    case 'i': case 'I':
+      new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.z += 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].z += 1.0f;
+      }
+      break;
 
-        case 'k': case 'K':
-          new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.z -= 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].z -= 1.0f;
-          }
-          break;
+    case 'k': case 'K':
+      new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.z -= 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].z -= 1.0f;
+      }
+      break;
 
-        case 'j': case 'J':
-          new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.x += 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].x += 1.0f;
-          }
-          break;
+    case 'j': case 'J':
+      new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.x += 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].x += 1.0f;
+      }
+      break;
 
-        case 'l': case 'L':
-          new_pos = scene.cube_translate[scene.selected_cube];
-          new_pos.x -= 1.0f;
-          if ( !check_collision_all( new_pos ) ) {
-            scene.cube_translate[scene.selected_cube].x -= 1.0f;
-          }
-          break;
+    case 'l': case 'L':
+      new_pos = scene.cube_translate[scene.selected_cube];
+      new_pos.x -= 1.0f;
+      if ( !check_collision_all( new_pos ) ) {
+        scene.cube_translate[scene.selected_cube].x -= 1.0f;
+      }
+      break;
 
-        case 't': case 'T':
-          if ( scene.selected_cube < MAX_CUBE_NUMBER - 1 ) {
-            scene.selected_cube++;
-          } else {
-            scene.selected_cube = 0;
-          }
-          break;
+    case 't': case 'T':
+      if ( scene.selected_cube < scene.cube_number - 1 ) {
+        scene.selected_cube++;
+      } else {
+        scene.selected_cube = 0;
+      }
+      break;
 
-        case 'g': case 'G':
-          if ( scene.selected_cube > 0 ) {
-            scene.selected_cube--;
-          } else {
-            scene.selected_cube = MAX_CUBE_NUMBER - 1;
-          }
-          break;
+    case 'g': case 'G':
+      if ( scene.selected_cube > 0 ) {
+        scene.selected_cube--;
+      } else {
+        scene.selected_cube = scene.cube_number - 1;
+      }
+      break;
     }
 
   glutPostRedisplay();
@@ -221,15 +230,15 @@ void keyboard( unsigned char key, int x, int y )
 void keyboard_up( unsigned char key, int x, int y )
 {
   switch ( key ) {
-  case 'w': case 'W':
-  case 's': case 'S':
-      set_camera_speed( &camera, 0.0 );
+    case 'w': case 'W':
+    case 's': case 'S':
+      set_camera_speed( &camera, 0.0f );
       glutPostRedisplay();
       break;
 
-  case 'a': case 'A':
-  case 'd': case 'D':
-      set_camera_side_speed( &camera, 0.0 );
+    case 'a': case 'A':
+    case 'd': case 'D':
+      set_camera_side_speed( &camera, 0.0f );
       glutPostRedisplay();
       break;
   }
@@ -239,9 +248,29 @@ void keyboard_up( unsigned char key, int x, int y )
 
 void keyboard_special( int key, int x, int y) {
   switch( key ) {
-      case GLUT_KEY_F1:
-        is_help_menu_on = ( is_help_menu_on ) ? FALSE : TRUE;
-        break;
+    case GLUT_KEY_F1:
+      is_help_menu_on = ( is_help_menu_on ) ? FALSE : TRUE;
+      break;
+
+    case GLUT_KEY_F2:
+      save_scene();
+      break;
+
+    case GLUT_KEY_F3:
+      load_scene( "res/savegame/last.save" );
+      break;
+
+    case GLUT_KEY_F4:
+      reset_scene( &scene );
+      break;
+
+    case GLUT_KEY_F5:
+      load_scene( "res/savegame/iglu.save" );
+      break;
+
+    case GLUT_KEY_F6:
+      load_scene( "res/savegame/pyramid.save" );
+      break;
   }
 
   glutPostRedisplay();

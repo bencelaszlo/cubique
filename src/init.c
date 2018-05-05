@@ -9,13 +9,13 @@ void init_opengl()
   glEnable( GL_NORMALIZE );
   glEnable( GL_AUTO_NORMAL );
 
-  glClearColor( 0.28125, 0.625, 0.75390625, 0.0f );
+  glClearColor( 0.28125f, 0.625f, 0.75390625f, 0.0f );
 
   glMatrixMode( GL_MODELVIEW );
   glLoadIdentity();
 
   glEnable( GL_DEPTH_TEST );
-  glClearDepth( 1.0 );
+  glClearDepth( 1.0f );
 
   glEnable( GL_TEXTURE_2D );
 

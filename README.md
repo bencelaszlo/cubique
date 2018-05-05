@@ -22,3 +22,4 @@ Egy 3 dimenziós, számítógépes építőjáték, mozgatható kockákkal.
 - [x] ködhatás
 - [x] áttetsző kockák
 - [x] ütközésvizsgálat a kockák között
+- [x] mentés/betöltés külső fájlból
