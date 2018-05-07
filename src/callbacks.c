@@ -129,7 +129,7 @@ void keyboard( unsigned char key, int x, int y )
       }
       if ( current_specular[3] > 0.1f ) {
         glEnable( GL_FOG );
-        glClearColor( 0.28125f, 0.625f, 0.75390625f, 0.0f );
+        glClearColor( 0.0f, 0.148f, 0.123f, 0.0f );
       }
       break;
 

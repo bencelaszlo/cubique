@@ -1,4 +1,5 @@
 #include "scene.h"
+#include "io.h"
 
 #include <obj/load.h>
 #include <obj/draw.h>
@@ -45,7 +46,7 @@ void init_material( const Material* material )
 void init_fog()
 {
   GLfloat fogDensity = 0.05f;
-  GLfloat fogColor[4] = { 0.28125f, 0.625f,  0.75390625f, 1.0f };
+  GLfloat fogColor[4] = { 0.0f, 0.148f, 0.123f, 1.0f };
   glFogi( GL_FOG_MODE, GL_EXP2 );
   glFogfv( GL_FOG_COLOR, fogColor );
   glFogf( GL_FOG_DENSITY, fogDensity );
@@ -79,7 +80,7 @@ void init_scene( Scene* scene )
   init_fog();
   init_material( &(scene->material) );
 
-  reset_scene( scene );
+  load_scene( "res/savegame/iglu.save" );
 }
 
 void draw_scene( const Scene* scene )
