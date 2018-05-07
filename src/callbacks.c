@@ -96,16 +96,16 @@ void keyboard( unsigned char key, int x, int y )
 {
   switch (key) {
     case 'w': case 'W':
-      set_camera_speed( &camera, 1 );
+      set_camera_speed( &camera, 5 );
       break;
     case 's': case 'S':
-      set_camera_speed( &camera, -1 );
+      set_camera_speed( &camera, -5 );
       break;
     case 'a': case 'A':
-      set_camera_side_speed( &camera, 1 );
+      set_camera_side_speed( &camera, 5 );
       break;
     case 'd': case 'D':;
-      set_camera_side_speed( &camera, -1 );
+      set_camera_side_speed( &camera, -5 );
       break;
     case '+':
       ;
@@ -208,7 +208,7 @@ void keyboard( unsigned char key, int x, int y )
       break;
 
     case 't': case 'T':
-      if ( scene.selected_cube < scene.cube_number - 1 ) {
+      if ( scene.selected_cube < DEFAULT_CUBE_NUMBER - 1 ) {
         scene.selected_cube++;
       } else {
         scene.selected_cube = 0;
@@ -219,7 +219,7 @@ void keyboard( unsigned char key, int x, int y )
       if ( scene.selected_cube > 0 ) {
         scene.selected_cube--;
       } else {
-        scene.selected_cube = scene.cube_number - 1;
+        scene.selected_cube = DEFAULT_CUBE_NUMBER - 1;
       }
       break;
     }
